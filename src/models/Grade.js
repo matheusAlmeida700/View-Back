@@ -9,11 +9,6 @@ const GradeSchema = new mongoose.Schema(
       grammar: { type: Number, default: 0, min: 0, max: 200 },
       structure: { type: Number, default: 0, min: 0, max: 200 },
     },
-    feedback: { type: String },
-    teacherId: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-    },
     essayId: { type: mongoose.Schema.Types.ObjectId, required: true },
   },
   { timestamps: true }

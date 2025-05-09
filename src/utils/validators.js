@@ -18,13 +18,15 @@ export const userSchema = Joi.object({
 export const studentSchema = Joi.object({
   name: Joi.string().required(),
   class: Joi.string().required(),
+  number: Joi.number().required(),
   userId: Joi.string().optional(),
 });
 
 export const essaySchema = Joi.object({
-  title: Joi.string().min(5).max(7000).required(),
+  title: Joi.string().max(500).optional().allow(""),
+  theme: Joi.string().min(5).max(500).required(),
   content: Joi.string().min(140).max(7000).required(),
-  submittedAt: Joi.date().iso(),
+  feedback: Joi.string().optional().allow(""),
   correctedAt: Joi.date().iso().allow(null),
   studentId: Joi.string().required(),
 });
@@ -37,7 +39,5 @@ export const gradeSchema = Joi.object({
     grammar: Joi.number().min(0).max(200).default(0),
     structure: Joi.number().min(0).max(200).default(0),
   }).required(),
-  feedback: Joi.string().optional(),
-  teacherId: Joi.string().required(),
   essayId: Joi.string().required(),
 });

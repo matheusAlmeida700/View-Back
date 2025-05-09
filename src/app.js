@@ -23,6 +23,32 @@ app.use("/api/auth", authRoutes);
 app.use("/api/essay", essayRoutes);
 app.use("/api/grade", gradeRoutes);
 
+app.get("/ai", async (req, res) => {
+  try {
+    const response = await fetch("http://localhost:8008/");
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error("Error calling AI (GET /):", error);
+    res.status(500).json({ error: "Error accessing AI service" });
+  }
+});
+
+app.post("/ai/analyze/text", async (req, res) => {
+  try {
+    const response = await fetch("http://localhost:8008/api/analyze/text", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(req.body),
+    });
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error("Error calling AI (POST /analyze/text):", error);
+    res.status(500).json({ error: "Error accessing AI service" });
+  }
+});
+
 app.use(errorHandler);
 
 export default app;
