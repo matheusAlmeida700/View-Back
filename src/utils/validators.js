@@ -12,32 +12,11 @@ export const userSchema = Joi.object({
     "string.empty": `"password" is required`,
     "string.min": `"password" should have a minimum length of {#limit}`,
   }),
-  role: Joi.string().valid("user", "admin").optional(),
-});
+  progress: Joi.array().items(Joi.string()).optional(),
+  streak: Joi.object({
+    current: Joi.number().min(0).required(),
+    lastUpdate: Joi.date().required(),
+  }).optional(),
 
-export const studentSchema = Joi.object({
-  name: Joi.string().required(),
-  class: Joi.string().required(),
-  number: Joi.number().required(),
-  userId: Joi.string().optional(),
-});
-
-export const essaySchema = Joi.object({
-  title: Joi.string().max(500).optional().allow(""),
-  theme: Joi.string().min(5).max(500).required(),
-  content: Joi.string().min(140).max(7000).required(),
-  feedback: Joi.string().optional().allow(""),
-  correctedAt: Joi.date().iso().allow(null),
-  studentId: Joi.string().required(),
-});
-
-export const gradeSchema = Joi.object({
-  overallScore: Joi.number().min(0).max(1000).required(),
-  criteria: Joi.object({
-    argumentation: Joi.number().min(0).max(200).default(0),
-    coherence: Joi.number().min(0).max(200).default(0),
-    grammar: Joi.number().min(0).max(200).default(0),
-    structure: Joi.number().min(0).max(200).default(0),
-  }).required(),
-  essayId: Joi.string().required(),
+  achievements: Joi.array().items(Joi.string()).optional(),
 });

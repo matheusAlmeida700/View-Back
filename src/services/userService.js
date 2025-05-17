@@ -11,7 +11,7 @@ export const fetchAllUsers = async () => {
 
 export const fetchUserById = async (id) => {
   try {
-    const user = await user.findById(id);
+    const user = await User.findById(id);
     if (!user) {
       throw new Error("User not found");
     }
