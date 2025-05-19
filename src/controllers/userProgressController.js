@@ -21,7 +21,7 @@ export const postLessonProgress = async (req, res) => {
 
 export const putStreak = async (req, res) => {
   try {
-    const updated = await updateStreak(req.params.id, req.body);
+    const updated = await updateStreak(req.params.id);
     res.json({ streak: updated });
   } catch (err) {
     res.status(400).json({ message: err.message });

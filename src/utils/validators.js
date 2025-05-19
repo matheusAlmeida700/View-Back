@@ -14,8 +14,8 @@ export const userSchema = Joi.object({
   }),
   progress: Joi.array().items(Joi.string()).optional(),
   streak: Joi.object({
-    current: Joi.number().min(0).required(),
-    lastUpdate: Joi.date().required(),
+    current: Joi.number().min(0),
+    lastUpdate: Joi.date(),
   }).optional(),
   xp: Joi.number().default(0),
   achievements: Joi.array().items(Joi.string()).optional(),
