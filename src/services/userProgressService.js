@@ -12,9 +12,9 @@ export const addCompletedLesson = async (userId, lessonId) => {
 
   const completedLessons = user.progress.length;
   const achievementsToCheck = [
+    { id: "five-lessons", required: 5 },
     { id: "ten-lessons", required: 10 },
-    { id: "fifty-lessons", required: 50 },
-    { id: "hundred-lessons", required: 100 },
+    { id: "twenty-five-lessons", required: 25 },
   ];
 
   if (!Array.isArray(user.achievements)) {
@@ -90,7 +90,30 @@ export const addXP = async (userId, amount) => {
   if (!user) throw new Error("User not found");
 
   user.xp += amount;
-  await user.save();
 
+  if (!Array.isArray(user.achievements)) {
+    user.achievements = [];
+  }
+
+  const achievementsToCheck = {
+    100: "xp-100",
+    500: "xp-500",
+    1000: "xp-1000",
+    5000: "xp-5000",
+    10000: "xp-10000",
+  };
+
+  for (const [threshold, achievementId] of Object.entries(
+    achievementsToCheck
+  )) {
+    if (
+      user.xp >= Number(threshold) &&
+      !user.achievements.includes(achievementId)
+    ) {
+      user.achievements.push(achievementId);
+    }
+  }
+
+  await user.save();
   return user.xp;
 };

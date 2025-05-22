@@ -20,3 +20,26 @@ export const userSchema = Joi.object({
   xp: Joi.number().default(0),
   achievements: Joi.array().items(Joi.string()).optional(),
 });
+
+export const postSchema = Joi.object({
+  userId: Joi.string().required(),
+  category: Joi.string()
+    .valid("algebra", "aritmetica", "geometria", "estatistica", "funcoes")
+    .required(),
+
+  content: Joi.string().max(600).required(),
+
+  answers: Joi.array()
+    .items(
+      Joi.object({
+        text: Joi.string().max(500).required(),
+        author: Joi.string().default("Anônimo"),
+      })
+    )
+    .default([]),
+});
+
+export const answerSchema = Joi.object({
+  text: Joi.string().max(500).required(),
+  userId: Joi.string().required(),
+});
