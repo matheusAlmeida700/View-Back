@@ -9,6 +9,25 @@ export const addCompletedLesson = async (userId, lessonId) => {
   if (alreadyCompleted) return user.progress;
 
   user.progress.push(lessonId);
+
+  const completedLessons = user.progress.length;
+  const achievementsToCheck = [
+    { id: "ten-lessons", required: 10 },
+    { id: "fifty-lessons", required: 50 },
+    { id: "hundred-lessons", required: 100 },
+  ];
+
+  if (!Array.isArray(user.achievements)) {
+    user.achievements = [];
+  }
+
+  for (const achievement of achievementsToCheck) {
+    const hasAchievement = user.achievements.includes(achievement.id);
+    if (!hasAchievement && completedLessons >= achievement.required) {
+      user.achievements.push(achievement.id);
+    }
+  }
+
   await user.save();
   return user.progress;
 };
@@ -34,6 +53,23 @@ export const updateStreak = async (userId) => {
         user.streak.lastUpdate = new Date();
       }
     }
+  }
+
+  const achievementsToCheck = {
+    1: "first-lesson",
+    7: "streak-7",
+    30: "streak-30",
+    75: "streak-75",
+    100: "streak-100",
+    365: "streak-365",
+    500: "streak-500",
+    1000: "streak-1000",
+  };
+
+  const achievementId = achievementsToCheck[user.streak.current];
+
+  if (achievementId && !user.achievements.includes(achievementId)) {
+    user.achievements.push(achievementId);
   }
 
   await user.save();
