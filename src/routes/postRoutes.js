@@ -10,6 +10,7 @@ import {
   addAnswer,
   updateAnswer,
   deleteAnswer,
+  getAnswerById,
 } from "../controllers/postController.js";
 
 const router = express.Router();
@@ -22,6 +23,7 @@ router.put("/:id", updatePostById);
 router.put("/target/:targetId", updatePostByTargetId);
 router.delete("/:id", deletePostById);
 
+router.get("/:postId/answer/:answerId", getAnswerById);
 router.post("/:postId/answer", addAnswer);
 router.put("/:postId/answer/:answerId", updateAnswer);
 router.delete("/:postId/answer/:answerId", deleteAnswer);

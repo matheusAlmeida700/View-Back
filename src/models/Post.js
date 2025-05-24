@@ -24,7 +24,14 @@ const postSchema = new mongoose.Schema(
     category: {
       type: String,
       required: true,
-      enum: ["algebra", "aritmetica", "geometria", "estatistica", "funcoes"],
+      enum: [
+        "algebra",
+        "aritmetica",
+        "geometria",
+        "estatistica",
+        "funcoes",
+        "outros",
+      ],
     },
     content: {
       type: String,

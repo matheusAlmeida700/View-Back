@@ -86,6 +86,20 @@ export const removePostById = async (id) => {
   }
 };
 
+export const fetchAnswerById = async (postId, answerId) => {
+  try {
+    const post = await Post.findById(postId);
+    if (!post) throw new Error("Post not found");
+
+    const answer = post.answers.id(answerId);
+    if (!answer) throw new Error("Answer not found");
+
+    return answer;
+  } catch (error) {
+    throw new Error("Error getting answer: " + error.message);
+  }
+};
+
 export const addAnswerToPost = async (postId, answerData) => {
   try {
     const post = await Post.findById(postId);

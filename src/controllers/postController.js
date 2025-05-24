@@ -7,6 +7,7 @@ import {
   addAnswerToPost,
   modifyAnswer,
   removeAnswer,
+  fetchAnswerById,
 } from "../services/postService.js";
 import { postSchema, answerSchema } from "../utils/validators.js";
 
@@ -108,6 +109,18 @@ export const deletePostById = async (req, res, next) => {
     const { id } = req.params;
     const message = await removePostById(id);
     res.status(200).json(message);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getAnswerById = async (req, res, next) => {
+  try {
+    const { postId, answerId } = req.params;
+
+    const answer = await fetchAnswerById(postId, answerId);
+
+    res.status(200).json({ answer });
   } catch (error) {
     next(error);
   }

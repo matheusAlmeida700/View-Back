@@ -24,7 +24,14 @@ export const userSchema = Joi.object({
 export const postSchema = Joi.object({
   userId: Joi.string().required(),
   category: Joi.string()
-    .valid("algebra", "aritmetica", "geometria", "estatistica", "funcoes")
+    .valid(
+      "algebra",
+      "aritmetica",
+      "geometria",
+      "estatistica",
+      "funcoes",
+      "outros"
+    )
     .required(),
 
   content: Joi.string().max(600).required(),
