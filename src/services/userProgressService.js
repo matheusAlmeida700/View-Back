@@ -1,119 +1,119 @@
-import User from "../models/User.js";
-import { calculateStreakUpdate } from "../utils/streakUtils.js";
+// import User from "../models/User.js";
+// import { calculateStreakUpdate } from "../utils/streakUtils.js";
 
-export const addCompletedLesson = async (userId, lessonId) => {
-  const user = await User.findById(userId);
-  if (!user) throw new Error("User not found");
+// export const addCompletedLesson = async (userId, lessonId) => {
+//   const user = await User.findById(userId);
+//   if (!user) throw new Error("User not found");
 
-  const alreadyCompleted = user.progress.includes(lessonId);
-  if (alreadyCompleted) return user.progress;
+//   const alreadyCompleted = user.progress.includes(lessonId);
+//   if (alreadyCompleted) return user.progress;
 
-  user.progress.push(lessonId);
+//   user.progress.push(lessonId);
 
-  const completedLessons = user.progress.length;
-  const achievementsToCheck = [
-    { id: "five-lessons", required: 5 },
-    { id: "ten-lessons", required: 10 },
-    { id: "twenty-five-lessons", required: 25 },
-  ];
+//   const completedLessons = user.progress.length;
+//   const achievementsToCheck = [
+//     { id: "five-lessons", required: 5 },
+//     { id: "ten-lessons", required: 10 },
+//     { id: "twenty-five-lessons", required: 25 },
+//   ];
 
-  if (!Array.isArray(user.achievements)) {
-    user.achievements = [];
-  }
+//   if (!Array.isArray(user.achievements)) {
+//     user.achievements = [];
+//   }
 
-  for (const achievement of achievementsToCheck) {
-    const hasAchievement = user.achievements.includes(achievement.id);
-    if (!hasAchievement && completedLessons >= achievement.required) {
-      user.achievements.push(achievement.id);
-    }
-  }
+//   for (const achievement of achievementsToCheck) {
+//     const hasAchievement = user.achievements.includes(achievement.id);
+//     if (!hasAchievement && completedLessons >= achievement.required) {
+//       user.achievements.push(achievement.id);
+//     }
+//   }
 
-  await user.save();
-  return user.progress;
-};
+//   await user.save();
+//   return user.progress;
+// };
 
-export const updateStreak = async (userId) => {
-  const user = await User.findById(userId);
-  if (!user) throw new Error("User not found");
+// export const updateStreak = async (userId) => {
+//   const user = await User.findById(userId);
+//   if (!user) throw new Error("User not found");
 
-  if (!user.streak) {
-    user.streak = { current: 1, lastUpdate: new Date() };
-  } else {
-    if (!user.streak.current || user.streak.current <= 0) {
-      user.streak.current = 1;
-      user.streak.lastUpdate = new Date();
-    } else {
-      const action = calculateStreakUpdate(user.streak.lastUpdate);
+//   if (!user.streak) {
+//     user.streak = { current: 1, lastUpdate: new Date() };
+//   } else {
+//     if (!user.streak.current || user.streak.current <= 0) {
+//       user.streak.current = 1;
+//       user.streak.lastUpdate = new Date();
+//     } else {
+//       const action = calculateStreakUpdate(user.streak.lastUpdate);
 
-      if (action === "increment") {
-        user.streak.current += 1;
-        user.streak.lastUpdate = new Date();
-      } else if (action === "reset") {
-        user.streak.current = 1;
-        user.streak.lastUpdate = new Date();
-      }
-    }
-  }
+//       if (action === "increment") {
+//         user.streak.current += 1;
+//         user.streak.lastUpdate = new Date();
+//       } else if (action === "reset") {
+//         user.streak.current = 1;
+//         user.streak.lastUpdate = new Date();
+//       }
+//     }
+//   }
 
-  const achievementsToCheck = {
-    1: "first-lesson",
-    7: "streak-7",
-    30: "streak-30",
-    75: "streak-75",
-    100: "streak-100",
-    365: "streak-365",
-    500: "streak-500",
-    1000: "streak-1000",
-  };
+//   const achievementsToCheck = {
+//     1: "first-lesson",
+//     7: "streak-7",
+//     30: "streak-30",
+//     75: "streak-75",
+//     100: "streak-100",
+//     365: "streak-365",
+//     500: "streak-500",
+//     1000: "streak-1000",
+//   };
 
-  const achievementId = achievementsToCheck[user.streak.current];
+//   const achievementId = achievementsToCheck[user.streak.current];
 
-  if (achievementId && !user.achievements.includes(achievementId)) {
-    user.achievements.push(achievementId);
-  }
+//   if (achievementId && !user.achievements.includes(achievementId)) {
+//     user.achievements.push(achievementId);
+//   }
 
-  await user.save();
-  return user.streak;
-};
+//   await user.save();
+//   return user.streak;
+// };
 
-export const updateAchievements = async (userId, achievements) => {
-  const user = await User.findById(userId);
-  if (!user) throw new Error("User not found");
+// export const updateAchievements = async (userId, achievements) => {
+//   const user = await User.findById(userId);
+//   if (!user) throw new Error("User not found");
 
-  user.achievements = achievements;
-  await user.save();
-  return user.achievements;
-};
+//   user.achievements = achievements;
+//   await user.save();
+//   return user.achievements;
+// };
 
-export const addXP = async (userId, amount) => {
-  const user = await User.findById(userId);
-  if (!user) throw new Error("User not found");
+// export const addXP = async (userId, amount) => {
+//   const user = await User.findById(userId);
+//   if (!user) throw new Error("User not found");
 
-  user.xp += amount;
+//   user.xp += amount;
 
-  if (!Array.isArray(user.achievements)) {
-    user.achievements = [];
-  }
+//   if (!Array.isArray(user.achievements)) {
+//     user.achievements = [];
+//   }
 
-  const achievementsToCheck = {
-    100: "xp-100",
-    500: "xp-500",
-    1000: "xp-1000",
-    5000: "xp-5000",
-    10000: "xp-10000",
-  };
+//   const achievementsToCheck = {
+//     100: "xp-100",
+//     500: "xp-500",
+//     1000: "xp-1000",
+//     5000: "xp-5000",
+//     10000: "xp-10000",
+//   };
 
-  for (const [threshold, achievementId] of Object.entries(
-    achievementsToCheck
-  )) {
-    if (
-      user.xp >= Number(threshold) &&
-      !user.achievements.includes(achievementId)
-    ) {
-      user.achievements.push(achievementId);
-    }
-  }
+//   for (const [threshold, achievementId] of Object.entries(
+//     achievementsToCheck
+//   )) {
+//     if (
+//       user.xp >= Number(threshold) &&
+//       !user.achievements.includes(achievementId)
+//     ) {
+//       user.achievements.push(achievementId);
+//     }
+//   }
 
-  await user.save();
-  return user.xp;
-};
+//   await user.save();
+//   return user.xp;
+// };

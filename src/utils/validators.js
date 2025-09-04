@@ -12,41 +12,45 @@ export const userSchema = Joi.object({
     "string.empty": `"password" is required`,
     "string.min": `"password" should have a minimum length of {#limit}`,
   }),
-  progress: Joi.array().items(Joi.string()).optional(),
-  streak: Joi.object({
-    current: Joi.number().min(0),
-    lastUpdate: Joi.date(),
-  }).optional(),
-  xp: Joi.number().default(0),
-  achievements: Joi.array().items(Joi.string()).optional(),
 });
 
-export const postSchema = Joi.object({
-  userId: Joi.string().required(),
-  category: Joi.string()
-    .valid(
-      "algebra",
-      "aritmetica",
-      "geometria",
-      "estatistica",
-      "funcoes",
-      "outros"
-    )
-    .required(),
-
-  content: Joi.string().max(600).required(),
-
-  answers: Joi.array()
-    .items(
-      Joi.object({
-        text: Joi.string().max(500).required(),
-        author: Joi.string().default("Anônimo"),
-      })
-    )
-    .default([]),
+export const universeSchema = Joi.object({
+  id: Joi.string().required(),
+  name: Joi.string().required(),
+  position: Joi.object({
+    x: Joi.number().required(),
+    y: Joi.number().required(),
+  }).required(),
+  dimensions: Joi.object({
+    width: Joi.number().required(),
+    height: Joi.number().required(),
+  }).required(),
+  color: Joi.string().default("hsl(0, 0%, 80%)"),
+  opacity: Joi.number().default(0.75),
 });
 
-export const answerSchema = Joi.object({
-  text: Joi.string().max(500).required(),
+export const categorySchema = Joi.object({
+  id: Joi.string().required(),
+  name: Joi.string().required(),
+  universeId: Joi.string().required(),
+  offsetX: Joi.number().required(),
+  width: Joi.number().required(),
+  minWidth: Joi.number().required(),
+  maxWidth: Joi.number().required(),
+  color: Joi.string().default("hsl(0, 0%, 80%)"),
+  locked: Joi.boolean().default(false),
+  opacity: Joi.number().default(0.9),
+});
+
+export const pharmacySchema = Joi.object({
   userId: Joi.string().required(),
+  name: Joi.string().required(),
+  storeSize: Joi.string().valid("P", "M", "G").default("G"),
+  scalePixelsPerMeter: Joi.number().default(12),
+  dimensions: Joi.object({
+    width: Joi.number().required(),
+    height: Joi.number().required(),
+  }).required(),
+  universes: Joi.array().items(universeSchema).min(1),
+  categories: Joi.array().items(categorySchema).min(1),
 });
