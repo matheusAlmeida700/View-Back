@@ -17,3 +17,23 @@ export const login = async (req, res, next) => {
     next(error);
   }
 };
+
+export const requestPasswordReset = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const result = await requestPasswordResetService(email);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const resetPassword = async (req, res, next) => {
+  try {
+    const { token, newPassword } = req.body;
+    const result = await resetPasswordService(token, newPassword);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};

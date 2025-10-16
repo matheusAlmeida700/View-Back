@@ -42,3 +42,47 @@ export const loginUser = async ({ email, password }) => {
     },
   };
 };
+
+export const requestPasswordResetService = async (email) => {
+  const user = await User.findOne({ email });
+  if (!user) throw new Error("User not found");
+
+  const resetToken = crypto.randomBytes(32).toString("hex");
+  const tokenExpire = Date.now() + 15 * 60 * 1000;
+
+  user.resetPasswordToken = resetToken;
+  user.resetPasswordExpires = tokenExpire;
+  await user.save();
+
+  const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
+
+  const html = `
+    <h2>Redefinição de Senha</h2>
+    <p>Você solicitou uma redefinição de senha. Clique no link abaixo para criar uma nova senha:</p>
+    <a href="${resetLink}">${resetLink}</a>
+    <p>Esse link expira em 15 minutos.</p>
+  `;
+
+  await sendEmail(user.email, "Redefinição de senha", html);
+
+  return { message: "Password reset email sent" };
+};
+
+export const resetPasswordService = async (token, newPassword) => {
+  const user = await User.findOne({
+    resetPasswordToken: token,
+    resetPasswordExpires: { $gt: Date.now() },
+  });
+
+  if (!user) throw new Error("Invalid or expired token");
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  user.password = hashedPassword;
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpires = undefined;
+
+  await user.save();
+
+  return { message: "Password successfully reset" };
+};

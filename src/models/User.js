@@ -6,6 +6,8 @@ const UserSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     pharmacies: [{ type: mongoose.Schema.Types.ObjectId, ref: "Pharmacy" }],
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
   },
   { timestamps: true }
 );
