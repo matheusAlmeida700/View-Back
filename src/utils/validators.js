@@ -60,3 +60,15 @@ export const pharmacySchema = Joi.object({
   universes: Joi.array().items(universeSchema).min(1).required(),
   categories: Joi.array().items(categorySchema).min(1).required(),
 });
+
+export const pharmacyUpdateSchema = Joi.object({
+  name: Joi.string(),
+  storeSize: Joi.string().valid("P", "M", "G"),
+  scalePixelsPerMeter: Joi.number(),
+  dimensions: Joi.object({
+    width: Joi.number(),
+    height: Joi.number(),
+  }),
+  universes: Joi.array(),
+  categories: Joi.array(),
+}).min(1);
